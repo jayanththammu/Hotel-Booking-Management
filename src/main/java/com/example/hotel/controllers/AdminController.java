@@ -4,8 +4,10 @@ package com.example.hotel.controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +23,7 @@ import com.example.hotel.services.AdminService;
 
 import jakarta.servlet.http.HttpSession;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -51,9 +54,14 @@ public class AdminController {
 	}
 	
 	@PutMapping("/updatehotel/{id}")
-	public Long updateHotel(@PathVariable Long id,@RequestBody HotelDto hotel) {
+	public Long updateHotel(@PathVariable("id") Long id,@RequestBody HotelDto hotel) {
 		
 		return adminSevice.updateHotel(id,hotel);
+	}
+	
+	@PutMapping("/updateroom/{hotelid}/{roomno}")
+	public Integer updateRoom(@PathVariable("hotelid") Long hotelId,@PathVariable("roomno")  Integer roomNo,@ModelAttribute RoomDto roomDto) {
+		return adminSevice.updateRoom(hotelId, roomNo, roomDto);
 	}
 	
 	@GetMapping("/gethotel/{id}")
@@ -74,10 +82,7 @@ public class AdminController {
 		return adminSevice.getAllHotels();
 	}
 	
-	@PutMapping("/updateroom/{hotelid}/{roomid}")
-	public String updateRoom(@PathVariable Long hotelId,@PathVariable Long roomId,@RequestBody RoomDto roomDto) {
-		return adminSevice.updateRoom(hotelId, roomId, roomDto);
-	}
+ 
 	
 	
 	 

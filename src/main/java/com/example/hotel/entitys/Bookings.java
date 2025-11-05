@@ -1,6 +1,6 @@
 package com.example.hotel.entitys;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,8 +31,8 @@ public class Bookings {
 	    @JoinColumn(name = "room_id") // foreign key to Room
 	    private Room room;
 	 
-	private LocalDateTime endTime;
-	private LocalDateTime startTime;
+	private LocalDate endDate;
+	private LocalDate startdate;
 	private int amount;
 	
 }

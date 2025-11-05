@@ -1,14 +1,21 @@
 package com.example.hotel.services;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.hotel.Mapper.HotelMapper;
 import com.example.hotel.entitys.Admin;
 import com.example.hotel.entitys.Hotel;
 import com.example.hotel.entitys.Room;
+import com.example.hotel.factory.HotelFactory;
 import com.example.hotel.models.AdminLoginDto;
 import com.example.hotel.models.AdminRegisterDto;
 import com.example.hotel.models.HotelDto;
@@ -32,13 +39,22 @@ public class AdminSeviceImpl implements AdminService {
 	private final PasswordEncoder encoder;
 	
 	private final RoomRepo roomRepo;
+	
+	private final HotelFactory factory;
+	private final HotelMapper mapper;
+	
+ 
 
-	public AdminSeviceImpl(AdminRepo adminRepo, HotelRepo hotelRepo, PasswordEncoder encoder,RoomRepo roomRepo) {
+	public AdminSeviceImpl(AdminRepo adminRepo, HotelRepo hotelRepo, PasswordEncoder encoder,RoomRepo roomRepo
+							,HotelFactory factory
+							,HotelMapper mapper) {
 
 		this.adminRepo = adminRepo;
 		this.hotelRepo = hotelRepo;
 		this.encoder = encoder;
 		this.roomRepo = roomRepo;
+		this.factory = factory;
+		this.mapper = mapper;
 		 
 	}
 
@@ -75,26 +91,8 @@ public class AdminSeviceImpl implements AdminService {
 	@Transactional
 	public Long addHotel(HotelDto body) {
 
-		Hotel hotel = new Hotel();
-		
-
-			hotel.setHotelName(body.getHotelName())
-				 .setDescription(body.getDescription())
-				 .setContactNo(body.getContactNo())
-				 .setEmail(body.getEmail())
-				 .setLocation(body.getLocation())
-				 .setRating(body.getRating())
-				 .setRooms( body.getRooms()
-								   .stream()
-								   .map( r -> new Room().setHotel(hotel)
-										   				.setRoomNo(r.getRoomNo())
-										   				.setRoomShares(r.getRoomShares())
-										   				.setRoomType(r.getRoomType())
-										   				.setStatus(r.getStatus())
-										   				.setPricePerNight(r.getPricePerNight()))
-								   .toList());
-			
-			hotelRepo.save(hotel);
+		Hotel hotel =  factory.createHotelFromDto(body);
+		hotelRepo.save(hotel);
  
 
 		return hotel.getId();
@@ -104,24 +102,44 @@ public class AdminSeviceImpl implements AdminService {
 	@Transactional
 	public Long updateHotel(Long id, HotelDto hotelUpdate) {
 
-		Optional<Hotel> optionalHotel = hotelRepo.findById(id);
-
-		if (!optionalHotel.isPresent()) {
-			throw new Error("Wrong Id,No Hotel Found");
+ 
+		
+		Hotel existing = hotelRepo.findById(id).orElseThrow(()-> new Error("Hotel Not Found"));
+		
+		Hotel updated =  Hotel.from(existing)
+								.setHotelName(hotelUpdate.getHotelName() != null ? hotelUpdate.getHotelName() : existing.getHotelName())
+								.setContactNo(hotelUpdate.getContactNo() != null ? hotelUpdate.getContactNo() : existing.getContactNo())
+								.setDescription(hotelUpdate.getDescription() != null ? hotelUpdate.getDescription() : existing.getDescription())
+								.setEmail(hotelUpdate.getEmail() != null ? hotelUpdate.getEmail() : existing.getEmail())
+								.setLocation(hotelUpdate.getLocation() != null ? hotelUpdate.getLocation() : existing.getLocation())
+								.setRating(hotelUpdate.getRating() != null ? hotelUpdate.getRating() : existing.getRating())
+		
+						.build();
+		
+		hotelRepo.save(updated);
+		return updated.getId();
 		}
-
-		Hotel hotel = optionalHotel.get();
-
-		if (hotelUpdate.getHotelName() != null) { hotel.setHotelName(hotelUpdate.getHotelName());}
-		if (hotelUpdate.getContactNo() != null) {hotel.setContactNo(hotelUpdate.getContactNo());}
-		if (hotelUpdate.getEmail() != null) {	hotel.setEmail(hotelUpdate.getEmail());}
-		if (hotelUpdate.getLocation() != null) {	hotel.setLocation(hotelUpdate.getLocation());}
-		if (hotelUpdate.getRating() != null) {	hotel.setRating(hotelUpdate.getRating());}
-		if (hotelUpdate.getDescription() != null) {	hotel.setDescription(hotelUpdate.getDescription());}	
-
-		hotelRepo.save(hotel);
-
-		return hotel.getId();
+	
+	@Override
+	@Transactional
+	public Integer updateRoom(Long hotelId,Integer roomNo,RoomDto roomDto) {
+		
+		Room existing = roomRepo.findByHotelIdAndRoomNo(hotelId, roomNo);
+		
+		Room updated = Room.from(existing).setRoomShares(roomDto.getRoomShares() != null ? roomDto.getRoomShares(): existing.getRoomShares())
+										  .setPricePerNight(roomDto.getPricePerNight() != null ? roomDto.getPricePerNight(): existing.getPricePerNight())
+										  .setRoomType(roomDto.getRoomType() != null ? roomDto.getRoomType(): existing.getRoomType())
+										  .setStatus(roomDto.getStatus() != null ? roomDto.getStatus(): existing.getStatus())
+										  
+				.build();
+		 
+			 
+	 
+		 
+		roomRepo.save(updated);
+		
+		return updated.getRoomNo();
+		
 	}
 
 	@Override
@@ -133,25 +151,8 @@ public class AdminSeviceImpl implements AdminService {
 		if (optional.isEmpty()) {
 			throw new Error("Wrong ID");
 		}
-		Hotel hotel = optional.get();
-
-		HotelDto hoteldto = new HotelDto();
-
-		hoteldto.setHotelName(hotel.getHotelName()).setLocation(hotel.getLocation())
-				.setDescription(hotel.getDescription()).setEmail(hotel.getEmail()).setRating(hotel.getRating())
-				.setContactNo(hotel.getContactNo())
-				.setRooms(hotel.getRooms()
-							   .stream()
-							   .map( r -> new RoomDto()
-									   				.setPricePerNight(r.getPricePerNight())
-									   				.setRoomNo(r.getRoomNo())
-									   				.setRoomShares(r.getRoomShares())
-									   				.setRoomType(r.getRoomType())
-									   				.setStatus(r.getStatus()))
-							   .toList());
-
-		 
-		return hoteldto;
+		HotelDto hotelDto = mapper.CreateDto(optional.get());
+		return hotelDto;
 	}
 
 	@Override
@@ -176,35 +177,12 @@ public class AdminSeviceImpl implements AdminService {
 	public List<HotelDto> getAllHotels() {
 
 		return hotelRepo.findAll().stream()
-								  .map( h -> new HotelDto().setHotelName(h.getHotelName())
-										  				   .setDescription(h.getDescription())
-										  				   .setContactNo(h.getContactNo())
-										  				   .setEmail(h.getEmail())
-										  				   .setRating(h.getRating())
-										  				   .setRooms( h.getRooms().stream().
-										  						   map( r -> new RoomDto().setRoomNo(r.getRoomNo())
-										  								   				  .setPricePerNight(r.getPricePerNight())
-										  								   				  .setRoomShares(r.getRoomShares())
-										  								   				  .setRoomType(r.getRoomType())
-										  								   				  .setStatus(r.getStatus()))
-										  						   .toList()))
+								  .map(mapper::CreateDto)
 								  .toList();
 
 		
 	}
 	
-	public String updateRoom(Long hotelId,Long roomId,RoomDto roomDto) {
-		
-		Room room = roomRepo.findByHotelIdAndId(hotelId, roomId);
-		
-		if(roomDto.getRoomNo() != null) { room.setRoomNo(roomDto.getRoomNo());}
-		if(roomDto.getPricePerNight() != null) { room.setPricePerNight(roomDto.getPricePerNight());}
-		if(roomDto.getRoomShares() != null) { room.setRoomShares(roomDto.getRoomShares());}
-		if(roomDto.getStatus() != null) { room.setStatus(roomDto.getStatus());}
-		
-		roomRepo.save(room);
-		
-		return "Room Updated Successfully";	 
-	}
+	 
 
 }

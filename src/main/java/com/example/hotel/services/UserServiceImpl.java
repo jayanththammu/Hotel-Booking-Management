@@ -1,6 +1,8 @@
 package com.example.hotel.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -103,31 +105,33 @@ public class UserServiceImpl implements UserService {
 																	.toList(); 
 	}
 
+	 
 	@Override
-	public String bookHotelById(Long hotelId,Long roomId,int noOfDays,HttpSession session) throws Exception {
-		// TODO Auto-generated method stub
+	public String bookHotel(Long hotelId,String roomType,LocalDate startDate,LocalDate endDate,HttpSession session) {
 		
-		Room room = roomRepo.findByHotelIdAndId(hotelId, roomId);
-		if(room.getStatus() == true) {
-			throw new Exception("Room Already Booked");
+		List<Room> rooms = roomRepo.findByHotelIdAndStatusAndRoomType(hotelId, false, roomType);
+		
+		if(rooms.size() == 0) {
+			throw new Error("No Rooms Available at The Moment");
 		}
+		Room room = rooms.get(0);
+		Hotel hotel = hotelRepo.findById(hotelId).get();
 		
-		
+		Bookings bookHotel = new Bookings();
+		long days = ChronoUnit.DAYS.between(startDate, endDate);
 		int money = room.getPricePerNight();
-		int amount = money*noOfDays;
+		
+		bookHotel.setAmount((int)(money*days))
+		.setHotel(hotel)
+		.setRoom(room)
+		.setStartdate(startDate)
+		.setEndDate(endDate)
+		.setUser((User)session.getAttribute("loggedinuser"));
+		
+		bookingRepo.save(bookHotel);
 		room.setStatus(true);
 		roomRepo.save(room);
-		
-		Bookings bookingHotel = new Bookings();
-		bookingHotel.setHotel(room.getHotel())
-					.setUser((User)session.getAttribute("loggedinuser"))
-				    .setRoom(room)
-				    .setAmount(amount)
-				    .setStartTime(LocalDateTime.now())
-				    .setEndTime(LocalDateTime.now().plusDays(2));
-		bookingRepo.save(bookingHotel);
-		
-		return "Booked Successfully";
+		return "";
 	}
 
 	@Override

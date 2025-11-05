@@ -1,6 +1,7 @@
 package com.example.hotel.controllers;
 
  
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.hotel.models.BookingDto;
 import com.example.hotel.models.HotelDto;
 import com.example.hotel.models.UserLogDto;
 import com.example.hotel.models.UserRegiDto;
@@ -37,14 +39,17 @@ public class UserController {
 	@GetMapping("/getAllHotels")
 	public List<HotelDto> viewAllHotels(){	return userService.viewAllHotels(); }
 	
-	@GetMapping("/bookHotel/{hotelid}/{roomid}/{days}")
-	public String bookHotel(@PathVariable("hotelid") Long hotelId,@PathVariable("roomid") Long roomId,@PathVariable("days") int days,HttpSession session) throws Exception {
-		return userService.bookHotelById(hotelId, roomId, days, session);
-	}
+	 
 	
 	@GetMapping("/gethotelbyname/{name}")
 	public HotelDto getHotelByName(@PathVariable("name") String name) {
 		return userService.searchHotelByName(name);
+	}
+	
+	@PostMapping("/book")
+	public String bookHotelById(@RequestBody BookingDto booking,HttpSession session) {
+		
+		return userService.bookHotel(booking.getHotelId(), booking.getRoomType(), booking.getStartdate(), booking.getEndDate(), session);
 	}
 	
 }

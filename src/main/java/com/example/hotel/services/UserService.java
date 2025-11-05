@@ -1,5 +1,6 @@
 package com.example.hotel.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.example.hotel.models.HotelDto;
@@ -12,7 +13,8 @@ public interface UserService {
 	String register(UserRegiDto reg) throws Exception;
 	String login(UserLogDto log,HttpSession session);
 	List<HotelDto> viewAllHotels();
-	String bookHotelById(Long hotelId,Long roomId,int noOfDays,HttpSession session) throws Exception;
+ 
+	String bookHotel(Long hotelId,String roomType,LocalDate startDate,LocalDate endDate,HttpSession session);
 	String cancelBookedHotelById(Long id);
 	HotelDto searchHotelByName(String name);
 }

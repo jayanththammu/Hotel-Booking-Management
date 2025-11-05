@@ -17,7 +17,8 @@ public interface AdminService {
 	Long updateHotel(Long id,HotelDto hotel);
 	HotelDto getHotel(Long id);
 	Long deleteHotel(Long id);
+	Integer updateRoom(Long hotelId,Integer roomNo,RoomDto roomDto);
 	List<HotelDto> getAllHotels();
-	String updateRoom(Long hotelId,Long roomId,RoomDto roomDto);
+	 
 	
 }
