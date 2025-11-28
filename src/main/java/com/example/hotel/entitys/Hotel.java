@@ -1,5 +1,6 @@
 package com.example.hotel.entitys;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -31,7 +32,7 @@ public class Hotel {
 	
 	 
 	@OneToMany(mappedBy = "hotel",cascade = CascadeType.ALL)
-	private List<Room> rooms;
+	private List<Room> rooms = new ArrayList<>();
 	
 	private Hotel(HotelBuilder builder) {
 	 
@@ -41,6 +42,7 @@ public class Hotel {
 		this.rating = builder.rating;
 		this.email = builder.email;
 		this.contactNo = builder.contactNo;
+		this.rooms = builder.rooms == null ? new ArrayList<>(): builder.rooms;
 		
 	}
 	 
@@ -73,12 +75,19 @@ public class Hotel {
 	                .setContactNo(hotel.getContactNo())
 	                .setLocation(hotel.getLocation())
 	                .setRating(hotel.getRating())
-	                .setRooms(hotel.getRooms());
+	                .setRooms(new ArrayList<>(hotel.getRooms()));
 	    }
+	 
+	 public void addRoom(Room room) {
+		 	 room.setHotel(this);
+			this.rooms.add(room);
+		}
+		 
 	
 
 	}
-	 
+
+	
 	
 	
 

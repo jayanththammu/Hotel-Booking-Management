@@ -16,9 +16,12 @@ import com.example.hotel.entitys.Admin;
 import com.example.hotel.entitys.Hotel;
 import com.example.hotel.entitys.Room;
 import com.example.hotel.factory.HotelFactory;
+import com.example.hotel.factory.RoomFactory;
 import com.example.hotel.models.AdminLoginDto;
 import com.example.hotel.models.AdminRegisterDto;
 import com.example.hotel.models.HotelDto;
+import com.example.hotel.models.HotelRoomCount;
+import com.example.hotel.models.HotelSummary;
 import com.example.hotel.models.RoomDto;
 import com.example.hotel.repositories.AdminRepo;
 import com.example.hotel.repositories.HotelRepo;
@@ -29,6 +32,8 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class AdminSeviceImpl implements AdminService {
+
+    private final RoomFactory roomFactory;
 
   
 
@@ -47,7 +52,7 @@ public class AdminSeviceImpl implements AdminService {
 
 	public AdminSeviceImpl(AdminRepo adminRepo, HotelRepo hotelRepo, PasswordEncoder encoder,RoomRepo roomRepo
 							,HotelFactory factory
-							,HotelMapper mapper) {
+							,HotelMapper mapper, RoomFactory roomFactory) {
 
 		this.adminRepo = adminRepo;
 		this.hotelRepo = hotelRepo;
@@ -55,6 +60,7 @@ public class AdminSeviceImpl implements AdminService {
 		this.roomRepo = roomRepo;
 		this.factory = factory;
 		this.mapper = mapper;
+		this.roomFactory = roomFactory;
 		 
 	}
 
@@ -90,12 +96,21 @@ public class AdminSeviceImpl implements AdminService {
 
 	@Transactional
 	public Long addHotel(HotelDto body) {
-
 		Hotel hotel =  factory.createHotelFromDto(body);
 		hotelRepo.save(hotel);
- 
-
 		return hotel.getId();
+	}
+	
+	private Boolean checkNull(String name) {
+		if(name == null || name.trim().isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+	
+	private <t> Boolean checkNull(t num) {
+		 
+		return num != null;
 	}
 
 	@Override
@@ -106,19 +121,48 @@ public class AdminSeviceImpl implements AdminService {
 		
 		Hotel existing = hotelRepo.findById(id).orElseThrow(()-> new Error("Hotel Not Found"));
 		
-		Hotel updated =  Hotel.from(existing)
-								.setHotelName(hotelUpdate.getHotelName() != null ? hotelUpdate.getHotelName() : existing.getHotelName())
-								.setContactNo(hotelUpdate.getContactNo() != null ? hotelUpdate.getContactNo() : existing.getContactNo())
-								.setDescription(hotelUpdate.getDescription() != null ? hotelUpdate.getDescription() : existing.getDescription())
-								.setEmail(hotelUpdate.getEmail() != null ? hotelUpdate.getEmail() : existing.getEmail())
-								.setLocation(hotelUpdate.getLocation() != null ? hotelUpdate.getLocation() : existing.getLocation())
-								.setRating(hotelUpdate.getRating() != null ? hotelUpdate.getRating() : existing.getRating())
+//		Hotel updated =  Hotel.from(existing)
+//								.setHotelName(hotelUpdate.getHotelName() != null ? hotelUpdate.getHotelName() : existing.getHotelName())
+//								.setContactNo(hotelUpdate.getContactNo() != null ? hotelUpdate.getContactNo() : existing.getContactNo())
+//								.setDescription(hotelUpdate.getDescription() != null ? hotelUpdate.getDescription() : existing.getDescription())
+//								.setEmail(hotelUpdate.getEmail() != null ? hotelUpdate.getEmail() : existing.getEmail())
+//								.setLocation(hotelUpdate.getLocation() != null ? hotelUpdate.getLocation() : existing.getLocation())
+//								.setRating(hotelUpdate.getRating() != null ? hotelUpdate.getRating() : existing.getRating())
+//		
+//						.build();
 		
-						.build();
-		
-		hotelRepo.save(updated);
-		return updated.getId();
+//		hotelRepo.save(updated);
+		 if (checkNull(hotelUpdate.getHotelName()))
+		        existing.setHotelName(hotelUpdate.getHotelName());
+
+		    if (checkNull(hotelUpdate.getContactNo()) )
+		        existing.setContactNo(hotelUpdate.getContactNo());
+
+		    if (checkNull(hotelUpdate.getDescription()) )
+		        existing.setDescription(hotelUpdate.getDescription());
+
+		    if (checkNull(hotelUpdate.getEmail()) )
+		        existing.setEmail(hotelUpdate.getEmail());
+
+		    if (checkNull(hotelUpdate.getRating())  )
+		        existing.setLocation(hotelUpdate.getLocation());
+
+		    if (checkNull(hotelUpdate.getRating()))
+		        existing.setRating(hotelUpdate.getRating());
+
+		return existing.getId();
 		}
+	
+	@Override
+	@Transactional
+	public Long addRoom(Long id,RoomDto roomDto) {
+		Hotel hotel = hotelRepo.findById(id).get();
+		Room room = roomFactory.createRoomFromDto(roomDto,hotel);
+		
+		hotel.addRoom(room);
+		hotelRepo.save(hotel);
+		return id;
+	}
 	
 	@Override
 	@Transactional
@@ -126,19 +170,26 @@ public class AdminSeviceImpl implements AdminService {
 		
 		Room existing = roomRepo.findByHotelIdAndRoomNo(hotelId, roomNo);
 		
-		Room updated = Room.from(existing).setRoomShares(roomDto.getRoomShares() != null ? roomDto.getRoomShares(): existing.getRoomShares())
-										  .setPricePerNight(roomDto.getPricePerNight() != null ? roomDto.getPricePerNight(): existing.getPricePerNight())
-										  .setRoomType(roomDto.getRoomType() != null ? roomDto.getRoomType(): existing.getRoomType())
-										  .setStatus(roomDto.getStatus() != null ? roomDto.getStatus(): existing.getStatus())
-										  
-				.build();
 		 
+		 
+		if(checkNull(roomDto.getRoomShares() )) {
+			existing.setRoomShares(roomDto.getRoomShares());
+		}
+		if(checkNull(roomDto.getPricePerNight() )) {
+			existing.setPricePerNight(roomDto.getPricePerNight());
+		}
+		if(checkNull(roomDto.getRoomType() )) {
+			existing.setRoomType(roomDto.getRoomType());
+		}
+		if(checkNull(roomDto.getStatus() )) {
+			existing.setStatus(roomDto.getStatus());
+		}
 			 
 	 
 		 
-		roomRepo.save(updated);
+		 
 		
-		return updated.getRoomNo();
+		return existing.getRoomNo();
 		
 	}
 
@@ -183,6 +234,18 @@ public class AdminSeviceImpl implements AdminService {
 		
 	}
 	
+	@Override
+	public List<HotelSummary> findHotels() {
+		// TODO Auto-generated method stub
+		return hotelRepo.findAllBy();
+	}
+	
+	
+	@Override
+	public List<HotelRoomCount> findRooms() {
+		// TODO Auto-generated method stub
+		return hotelRepo.findHotelRoomCount();
+	}
 	 
 
 }

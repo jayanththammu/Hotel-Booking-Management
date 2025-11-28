@@ -9,15 +9,17 @@ import java.util.NoSuchElementException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.hotel.entitys.Bookings;
+ 
 import com.example.hotel.entitys.Hotel;
 import com.example.hotel.entitys.Room;
 import com.example.hotel.entitys.User;
+import com.example.hotel.models.BookingDetails;
 import com.example.hotel.models.HotelDto;
 import com.example.hotel.models.RoomDto;
+import com.example.hotel.models.UserHotelSummary;
 import com.example.hotel.models.UserLogDto;
 import com.example.hotel.models.UserRegiDto;
-import com.example.hotel.repositories.BookingRepo;
+ 
 import com.example.hotel.repositories.HotelRepo;
 import com.example.hotel.repositories.RoomRepo;
 import com.example.hotel.repositories.UserRepo;
@@ -32,19 +34,19 @@ public class UserServiceImpl implements UserService {
 	
 	private final HotelRepo hotelRepo;
 	private final PasswordEncoder passwordencoder;
-	private final BookingRepo bookingRepo;
+	 
 	private final RoomRepo roomRepo;
 	
 	public UserServiceImpl(UserRepo userRepo,
 						   PasswordEncoder passwordencoder,
 						   HotelRepo hotelRepo,
-						   BookingRepo bookingRepo,
+ 
 						   RoomRepo roomRepo) {
 		// TODO Auto-generated constructor stub
 		this.userRepo = userRepo;
 		this.passwordencoder = passwordencoder;
 		this.hotelRepo = hotelRepo;
-		this.bookingRepo = bookingRepo;
+	 
 		this.roomRepo = roomRepo;
 	}
 
@@ -109,29 +111,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String bookHotel(Long hotelId,String roomType,LocalDate startDate,LocalDate endDate,HttpSession session) {
 		
-		List<Room> rooms = roomRepo.findByHotelIdAndStatusAndRoomType(hotelId, false, roomType);
-		
-		if(rooms.size() == 0) {
-			throw new Error("No Rooms Available at The Moment");
-		}
-		Room room = rooms.get(0);
-		Hotel hotel = hotelRepo.findById(hotelId).get();
-		
-		Bookings bookHotel = new Bookings();
-		long days = ChronoUnit.DAYS.between(startDate, endDate);
-		int money = room.getPricePerNight();
-		
-		bookHotel.setAmount((int)(money*days))
-		.setHotel(hotel)
-		.setRoom(room)
-		.setStartdate(startDate)
-		.setEndDate(endDate)
-		.setUser((User)session.getAttribute("loggedinuser"));
-		
-		bookingRepo.save(bookHotel);
-		room.setStatus(true);
-		roomRepo.save(room);
-		return "";
+	 return "";
 	}
 
 	@Override
@@ -159,6 +139,16 @@ public class UserServiceImpl implements UserService {
 									 													.setRoomType(r.getRoomType())
 									 													.setStatus(r.getStatus()))
 									 					.toList());
+	}
+	
+	@Override
+	public List<UserHotelSummary> getHotels() {
+		// TODO Auto-generated method stub
+		return hotelRepo.findAllUserHotel();
+	}
+	
+	public List<BookingDetails> getBookingDetails(){
+		return hotelRepo.findAllBookingDetails();
 	}
 
 }

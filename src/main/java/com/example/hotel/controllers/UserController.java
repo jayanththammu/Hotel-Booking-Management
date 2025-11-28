@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.hotel.models.BookingDetails;
 import com.example.hotel.models.BookingDto;
 import com.example.hotel.models.HotelDto;
+import com.example.hotel.models.UserHotelSummary;
 import com.example.hotel.models.UserLogDto;
 import com.example.hotel.models.UserRegiDto;
 import com.example.hotel.services.UserService;
@@ -52,4 +54,13 @@ public class UserController {
 		return userService.bookHotel(booking.getHotelId(), booking.getRoomType(), booking.getStartdate(), booking.getEndDate(), session);
 	}
 	
+	
+	@GetMapping("/hotels")
+	public List<UserHotelSummary> getHotelSummary(){
+		return userService.getHotels();
+	}
+	@GetMapping("/booking")
+	public List<BookingDetails> getBookingDetails(){
+		return userService.getBookingDetails();
+	}
 }

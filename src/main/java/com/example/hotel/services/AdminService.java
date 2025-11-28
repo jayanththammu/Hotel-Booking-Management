@@ -5,6 +5,8 @@ import java.util.List;
 import com.example.hotel.models.AdminLoginDto;
 import com.example.hotel.models.AdminRegisterDto;
 import com.example.hotel.models.HotelDto;
+import com.example.hotel.models.HotelRoomCount;
+import com.example.hotel.models.HotelSummary;
 import com.example.hotel.models.RoomDto;
 
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +21,9 @@ public interface AdminService {
 	Long deleteHotel(Long id);
 	Integer updateRoom(Long hotelId,Integer roomNo,RoomDto roomDto);
 	List<HotelDto> getAllHotels();
-	 
+	Long addRoom(Long id,RoomDto roomDto);
+	List<HotelSummary> findHotels();
+	List<HotelRoomCount> findRooms();
+
 	
 }

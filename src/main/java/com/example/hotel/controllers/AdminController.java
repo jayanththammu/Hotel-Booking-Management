@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.hotel.models.AdminLoginDto;
 import com.example.hotel.models.AdminRegisterDto;
 import com.example.hotel.models.HotelDto;
+import com.example.hotel.models.HotelRoomCount;
+import com.example.hotel.models.HotelSummary;
 import com.example.hotel.models.RoomDto;
 import com.example.hotel.services.AdminService;
 
@@ -59,8 +61,14 @@ public class AdminController {
 		return adminSevice.updateHotel(id,hotel);
 	}
 	
+	@PostMapping("/addRoom/{id}")
+	public Long addRoom(@PathVariable("id") Long id,@RequestBody RoomDto room) {
+		
+		return adminSevice.addRoom(id, room);
+	}
+	
 	@PutMapping("/updateroom/{hotelid}/{roomno}")
-	public Integer updateRoom(@PathVariable("hotelid") Long hotelId,@PathVariable("roomno")  Integer roomNo,@ModelAttribute RoomDto roomDto) {
+	public Integer updateRoom(@PathVariable("hotelid") Long hotelId,@PathVariable("roomno")  Integer roomNo,@RequestBody RoomDto roomDto) {
 		return adminSevice.updateRoom(hotelId, roomNo, roomDto);
 	}
 	
@@ -82,7 +90,16 @@ public class AdminController {
 		return adminSevice.getAllHotels();
 	}
 	
- 
+	@GetMapping("/getHotelData")
+	public List<HotelSummary> getHotelData(){
+		return adminSevice.findHotels();
+	}
+	
+	
+	@GetMapping("/getroomcount")
+	public List<HotelRoomCount> getRoomCount(){
+		return adminSevice.findRooms();
+	}
 	
 	
 	 
