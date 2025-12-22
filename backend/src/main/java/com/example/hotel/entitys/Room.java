@@ -1,75 +1,100 @@
 package com.example.hotel.entitys;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
-public class Room {
+@Table(
+	    name = "room",
+	    uniqueConstraints = @UniqueConstraint(columnNames = {"hotel_id", "room_number"})
+	)
+public class Room { 
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long roomId;
 	
-	private Integer roomNo;
-	private Integer roomShares;
+	@Column(nullable = false)
+	private Long roomNumber;
+	
+	private Integer noOfShares;
+	
+	@Column(nullable = false)	
+	private  BigDecimal  roomPrice;
+	
+	@Column(nullable = false)
 	private String roomType;
-	private Integer pricePerNight;
-	private Boolean status;
-	 
+	
 	@ManyToOne()
 	@JoinColumn(name = "hotel_id")
 	private Hotel hotel;
 	
+	@OneToMany(mappedBy = "room")
+	private List<Bookings> bookings;
+	
 	protected Room() {}
 	
-	private Room(RoomBuilder builder) {
-		this.roomNo = builder.roomNo;
-		this.roomShares = builder.roomShares;
+	private Room(Builder builder) {
+		this.roomNumber = builder.roomNumber;
+		this.noOfShares = builder.noOfShares;
+		this.roomPrice = builder.roomPrice;
 		this.roomType = builder.roomType;
-		this.pricePerNight = builder.pricePerNight;
-		this.status = builder.status;
 		this.hotel = builder.hotel;
-		 
+		this.bookings = builder.bookings;
 		
 	}
-	@Data
+	
+	@Getter
+	@Setter
 	@Accessors(chain = true)
-	public static class RoomBuilder {
-		private Long id;
+	public static class Builder{
 		
-		private Integer roomNo;
-		private Integer roomShares;
-		private String  roomType;
-		private Integer pricePerNight;
-		private Boolean status;
+		private Long roomNumber;
+		private Integer noOfShares;
+		private BigDecimal  roomPrice;
+		private String roomType;
 		private Hotel hotel;
+		private List<Bookings> bookings;
 		
+		public Builder() {
+			
+			
+		}
 		
 		public Room build() {
 			return new Room(this);
 		}
+		
 	}
-	
-	public static RoomBuilder from(Room room) {
-		return new RoomBuilder()
-				.setPricePerNight(room.getPricePerNight())
-				.setRoomNo(room.getRoomNo())
-				.setRoomType(room.getRoomType())
-				.setStatus(room.getStatus())
-				.setRoomShares(room.getRoomShares());
-	}
-	
-	 
-	
 	
 	
 	
 }
+/*
+create Table room(
+room_id bigint primary key auto_increment,
+room_number bigint unique,
+no_of_shares int,
+room_price decimal(10,2),
+room_type varchar(10),
+hotel_id bigint,
+foreign key (hotel_id) references Hotel(hotel_id));
+
+*/

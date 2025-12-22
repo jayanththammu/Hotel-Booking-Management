@@ -1,0 +1,23 @@
+.user_dashboard {
+  /* colors */
+  --black: #262525;
+  --red: #e0303e;
+  --white: #fff;
+  --background_color: rgb(101, 101, 101);
+  --d9: #d9d9d9;
+
+  /* borders */
+  --border-red: 1px solid var(--red);
+  --border-black: 1px solid var(--black);
+
+  /* transitions */
+  --transition-ease: 0.4s ease;
+  --transition-easein: 0.4s ease-in;
+
+  font-family: "Inter";
+}
+main {
+  padding: 0;
+  margin: 0;
+  background-color: var(--background_color);
+}

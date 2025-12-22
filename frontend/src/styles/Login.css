@@ -1,0 +1,211 @@
+@import url("https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Jim+Nightshade&family=Judson:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+.login_page {
+  display: flex;
+  height: 100dvh;
+
+  background: white;
+  --primary-color: #27f5b0;
+  --font-family: "Quicksand";
+  --font-20: 20px;
+  --font-30: 30px;
+}
+* {
+  box-sizing: border-box;
+}
+
+.login_left {
+  width: 400px;
+  display: flex;
+  outline: 1px solid red;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-family);
+  justify-content: center;
+  padding: 20px;
+}
+
+.login_right {
+  width: 100%;
+  background-color: var(--primary-color);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login_left_content_header {
+  font-size: 50px;
+}
+.login_left_content_para {
+  font-size: 25px;
+  width: 207px;
+}
+
+.login_component {
+  display: flex;
+  flex-direction: column;
+
+  width: 800px;
+  height: auto;
+
+  align-items: center;
+
+  padding: 10px;
+  border-radius: 10px;
+  font-family: var(--font-family);
+}
+.login_component form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.login_component form img {
+  height: 200px;
+  width: 260px;
+  padding-bottom: 50px;
+}
+.login_component form input {
+  height: 40px;
+  width: 400px;
+  font-family: var(--font-family);
+  font-size: 22px;
+  padding-left: 20px;
+  border: none;
+}
+.login_component form input:focus {
+  outline: 2px solid black;
+}
+.login_component form button {
+  width: 200px;
+  height: 50px;
+  padding: 0px auto;
+
+  font-size: var(--font-20);
+  font-family: var(--font-family);
+  border: none;
+  background-color: #f0fbfb;
+  transition: all 1s ease;
+}
+.login_component form button:hover {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+}
+.line {
+  margin: 20px 0;
+  width: 80%;
+  height: 1px;
+  background-color: black;
+}
+.login_footer span {
+  font-size: var(--font-30);
+
+  color: black;
+  text-decoration: none;
+}
+
+.login_footer a {
+  text-decoration: none;
+}
+.login_footer span:hover {
+  color: white;
+  text-decoration: none;
+}
+.admin_button {
+  position: fixed;
+  left: 100%;
+  top: 5%;
+  height: 30px;
+  width: 100px;
+  font-size: 20px;
+  font-family: var(--font-family);
+  transform: translateX(-120%);
+  transition: 0.4s linear;
+}
+.admin_button:hover {
+  color: white;
+  background-color: black;
+  border: 1px solid white;
+}
+
+@media screen and (max-width: 768px) {
+  .login_left_content_header {
+    font-size: 36px;
+    text-align: center;
+  }
+
+  .login_left_content_para {
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .login_component form img {
+    width: 200px;
+    height: auto;
+    padding-bottom: 30px;
+  }
+
+  .login_component form input {
+    width: 100%;
+    font-size: 18px;
+  }
+
+  .login_component form button {
+    width: 100%;
+    height: 45px;
+  }
+
+  .login_footer span {
+    font-size: 22px;
+  }
+
+  .admin_button {
+    width: 80px;
+    font-size: 16px;
+  }
+  .login_right {
+    width: 100%;
+    overflow-x: hidden; /* important */
+  }
+  .login_component {
+    width: 100%;
+    max-width: 100%;
+  }
+  .login_component form input {
+    width: 100%;
+    max-width: 100%;
+  }
+  .login_component form button {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 480px) {
+  .login_left {
+    padding: 20px 10px;
+  }
+
+  .login_left_content_header {
+    font-size: 28px;
+  }
+
+  .login_left_content_para {
+    font-size: 16px;
+  }
+
+  .login_component {
+    padding: 10px;
+  }
+
+  .login_footer span {
+    font-size: 18px;
+  }
+  @media screen and (max-width: 768px) {
+    .login_right {
+      width: 100%;
+      overflow-x: hidden; /* important */
+    }
+  }
+}

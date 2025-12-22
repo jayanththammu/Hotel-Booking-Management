@@ -1,13 +1,10 @@
 package com.example.hotel.controllers;
 
- 
-
 import java.util.List;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,92 +12,106 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.hotel.models.AdminLoginDto;
-import com.example.hotel.models.AdminRegisterDto;
-import com.example.hotel.models.HotelDto;
-import com.example.hotel.models.HotelRoomCount;
-import com.example.hotel.models.HotelSummary;
-import com.example.hotel.models.RoomDto;
-import com.example.hotel.services.AdminService;
+import com.example.hotel.HotelBookingApplication;
+import com.example.hotel.dtos.AdminDto;
+import com.example.hotel.dtos.HotelDto;
+import com.example.hotel.dtos.RoomDto;
+import com.example.hotel.repositorys.BookingsRepository;
+import com.example.hotel.service.AdminService;
 
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://localhost:5173")
-@RestController
+@RestController()
 @RequestMapping("/admin")
 public class AdminController {
 
-	 
-	private final AdminService adminSevice;
-	
-	public AdminController( AdminService adminSevice) {
-		// TODO Auto-generated constructor stub
-		this.adminSevice = adminSevice;
+    private final HotelBookingApplication hotelBookingApplication;
+
+	private final BookingsRepository bookingsRepository;
+
+	private final AdminService adminService;
+
+	public AdminController(AdminService adminService, BookingsRepository bookingsRepository, HotelBookingApplication hotelBookingApplication) {
+		this.adminService = adminService;
+		this.bookingsRepository = bookingsRepository;
+		this.hotelBookingApplication = hotelBookingApplication;
+	}
+
+	@PostMapping("register")
+	public ResponseEntity<String> Register(@RequestBody AdminDto adminDto) {
+
+		return ResponseEntity.ok(adminService.register(adminDto));
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<String> login(@RequestBody AdminDto adminDto, HttpSession session) {
+
+		return ResponseEntity.ok(adminService.login(adminDto, session));
 	}
 	
-	@PostMapping("/reg")
-	public void register(@RequestBody AdminRegisterDto body) {
-		adminSevice.register(body);
+	@GetMapping("/logout")
+	public ResponseEntity<String> logOut(HttpSession session){
+		return ResponseEntity.ok(adminService.logOut(session));
 	}
-	
-	@PostMapping("/log")
-	public String login(@RequestBody AdminLoginDto body,HttpSession session) {
-		return adminSevice.login(body, session);
-	}
-	
-	
+
 	@PostMapping("/addhotel")
-	public Long addHotel(@RequestBody HotelDto body) {
-		return adminSevice.addHotel(body);
-			
+	public ResponseEntity<String> addHotel(@RequestBody HotelDto hotelDto) {
+
+		return ResponseEntity.ok(adminService.addHotel(hotelDto));
 	}
-	
+
 	@PutMapping("/updatehotel/{id}")
-	public Long updateHotel(@PathVariable("id") Long id,@RequestBody HotelDto hotel) {
-		
-		return adminSevice.updateHotel(id,hotel);
+	public ResponseEntity<String> updateHotel(@PathVariable Long id, @RequestBody HotelDto hotelDto) {
+
+		return ResponseEntity.ok(adminService.updateHotel(id, hotelDto));
 	}
-	
-	@PostMapping("/addRoom/{id}")
-	public Long addRoom(@PathVariable("id") Long id,@RequestBody RoomDto room) {
-		
-		return adminSevice.addRoom(id, room);
-	}
-	
-	@PutMapping("/updateroom/{hotelid}/{roomno}")
-	public Integer updateRoom(@PathVariable("hotelid") Long hotelId,@PathVariable("roomno")  Integer roomNo,@RequestBody RoomDto roomDto) {
-		return adminSevice.updateRoom(hotelId, roomNo, roomDto);
-	}
-	
-	@GetMapping("/gethotel/{id}")
-	public HotelDto getHotel(@PathVariable Long id) {
-		
-		return adminSevice.getHotel(id);
-	}
-	
+
 	@DeleteMapping("/deletehotel/{id}")
-	public Long deleteHotel(@PathVariable Long id) {
-		
-		return adminSevice.deleteHotel(id);
+	public ResponseEntity<String> deleteHotel(@PathVariable Long id) {
+
+		return ResponseEntity.ok(adminService.deleteHotel(id));
 	}
-	
-	@GetMapping("/getallhotels")
-	public List<HotelDto> getAllHotels() {
-		
-		return adminSevice.getAllHotels();
+
+	@GetMapping("/gethotel/{id}")
+	public ResponseEntity<HotelDto> getHotel(@PathVariable Long id) {
+
+		return ResponseEntity.ok(adminService.getHotel(id));
 	}
-	
-	@GetMapping("/getHotelData")
-	public List<HotelSummary> getHotelData(){
-		return adminSevice.findHotels();
+
+	@GetMapping("/gethotels")
+	public ResponseEntity<List<HotelDto>> getHotels() {
+
+		return ResponseEntity.ok(adminService.getHotels());
 	}
-	
-	
-	@GetMapping("/getroomcount")
-	public List<HotelRoomCount> getRoomCount(){
-		return adminSevice.findRooms();
+
+	@PostMapping("/addroom/{id}")
+	public ResponseEntity<String> addRoom(@PathVariable Long id, @RequestBody RoomDto room) {
+		// TODO Auto-generated method stub
+		return ResponseEntity.ok(adminService.addRoom(id, room));
 	}
-	
-	
+
+	@PutMapping("/updateroom/{id}/{roomid}")
+	public ResponseEntity<String> updateRoom(@PathVariable("id") Long id, @PathVariable("roomid") Long roomid,
+			@RequestBody RoomDto roomDto) {
+		 
+		return ResponseEntity.ok(adminService.updateRoom(id, roomid, roomDto));
+	}
+	@DeleteMapping("/delroom/{hotelid}/{roomno}")
+	public ResponseEntity<String>  delRoom(@PathVariable("hotelid")Long hotelId,@PathVariable("roomno") Long roomNo) {
 	 
+		return ResponseEntity.ok(adminService.delRoom(hotelId, roomNo));
+	}
+
+	@GetMapping("/getroom/{hotelid}/{roomid}")
+	public ResponseEntity<RoomDto> getRoom(@PathVariable("hotelid") Long hotelId,@PathVariable("roomid") Long roomId) {
+		 
+		return ResponseEntity.ok(adminService.getRoom(hotelId, roomId));
+	}
+
+	@GetMapping("/getrooms/{hotelid}")
+	public ResponseEntity<List<RoomDto>> getAllRooms(@PathVariable("hotelid")Long hotelId) {
+	 
+		return ResponseEntity.ok(adminService.getAllRooms(hotelId));
+	}
+
 }

@@ -1,93 +1,73 @@
 package com.example.hotel.entitys;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
-
-@Entity
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
+@Entity
 public class Hotel {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long hotelId;
 	
+	@Column(nullable = false)
 	private String hotelName;
-	private String location;
-	private String description;
-	private String rating;
-	private String email;
-	private String contactNo;
 	
-	 protected Hotel() {}
+	private String hotelDescription;
 	
-	 
+	private String hotelRating;
+	
+	@OneToMany(mappedBy = "hotel")
+	private List<Bookings> bookings;
+	
 	@OneToMany(mappedBy = "hotel",cascade = CascadeType.ALL)
-	private List<Room> rooms = new ArrayList<>();
+	private List<Room> rooms;
 	
-	private Hotel(HotelBuilder builder) {
-	 
-		this.hotelName = builder.hotelName;
-		this.location = builder.location;
-		this.description = builder.description;
-		this.rating = builder.rating;
-		this.email = builder.email;
-		this.contactNo = builder.contactNo;
-		this.rooms = builder.rooms == null ? new ArrayList<>(): builder.rooms;
+	protected Hotel() {}
+	
+	private Hotel(Builder builder) {
 		
+		this.hotelName = builder.hotelName;
+		this.hotelDescription = builder.hotelDescription;
+		this.hotelRating = builder.hotelRating;
+		this.rooms = builder.rooms;
 	}
-	 
-	
-	@Data
+	@Getter
+	@Setter
 	@Accessors(chain = true)
-	public static class HotelBuilder{
-		private Long id;
+	public static class Builder {
+
 		private String hotelName;
-		private String location;
-		private String description;
-		private String rating;
-		private String email;
-		private String contactNo;
+		private String hotelDescription;
+		private String hotelRating;
 		private List<Room> rooms;
+		
+		public Builder() {}
 		
 		public Hotel build() {
 			return new Hotel(this);
 		}
-		
-	
-			
 	}
 	
-	 public static HotelBuilder from(Hotel hotel) {
-	        return new HotelBuilder()
-	                .setHotelName(hotel.getHotelName())
-	                .setDescription(hotel.getDescription())
-	                .setEmail(hotel.getEmail())
-	                .setContactNo(hotel.getContactNo())
-	                .setLocation(hotel.getLocation())
-	                .setRating(hotel.getRating())
-	                .setRooms(new ArrayList<>(hotel.getRooms()));
-	    }
-	 
-	 public void addRoom(Room room) {
-		 	 room.setHotel(this);
-			this.rooms.add(room);
-		}
-		 
-	
+}
+/*
+ * create table Hotel(
+hotel_id bigint primary key auto_increment,
+hotel_name varchar(20) not null,
+hotel_description text,
+hotel_rating varchar(10)
+ 
+);
 
-	}
-
-	
-	
-	
-
+*/

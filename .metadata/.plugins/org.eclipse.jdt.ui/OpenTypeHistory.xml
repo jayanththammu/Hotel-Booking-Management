@@ -1,2 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<typeInfoHistroy/>
+<typeInfoHistroy>
+    <typeInfo handle="=backend/C:\/Users\/DELL\/.m2\/repository\/org\/springframework\/data\/spring-data-jpa\/3.5.4\/spring-data-jpa-3.5.4.jar=/maven.pomderived=/true=/=/maven.groupId=/org.springframework.data=/=/maven.artifactId=/spring-data-jpa=/=/maven.version=/3.5.4=/=/maven.scope=/compile=/=/maven.pomderived=/true=/&lt;org.springframework.data.jpa.repository(JpaRepository.class[JpaRepository" modifiers="1537" timestamp="1759313690289"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.service{GetHotelInterface.java[GetHotelInterface" modifiers="513" timestamp="1765618879049"/>
+    <typeInfo handle="=backend/C:\/Users\/DELL\/.m2\/repository\/org\/springframework\/security\/spring-security-web\/6.5.5\/spring-security-web-6.5.5.jar=/maven.pomderived=/true=/=/maven.groupId=/org.springframework.security=/=/maven.artifactId=/spring-security-web=/=/maven.version=/6.5.5=/=/maven.scope=/compile=/=/maven.pomderived=/true=/&lt;org.springframework.security.web.webauthn.management(JdbcUserCredentialRepository$GetBytes.class[GetBytes" modifiers="1546" timestamp="1759313691112"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.dtointerfaces{BookingDtoInterface.java[BookingDtoInterface" modifiers="513" timestamp="1766397627482"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.service{BookingService.java[BookingService" modifiers="513" timestamp="1766163703602"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.Factory{BookingFactory.java[BookingFactory" modifiers="513" timestamp="1765901605463"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.service{GetRoomDetails.java[GetRoomDetails" modifiers="513" timestamp="1766058157447"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.mapper{GetUserDto.java[GetUserDto" modifiers="513" timestamp="1766144587329"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.repositorys{BookingsRepository.java[BookingsRepository" modifiers="513" timestamp="1766398313227"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.mapper{Mapper.java[Mapper" modifiers="513" timestamp="1766216078790"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.dtos{BookingDto.java[BookingDto" modifiers="1" timestamp="1766397631332"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.mapper{MapperImpl.java[MapperImpl" modifiers="1" timestamp="1766397807066"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.entitys{Bookings.java[Bookings" modifiers="1" timestamp="1766398386127"/>
+    <typeInfo handle="=backend/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.example.hotel.service.impl{BookingServiceImpl.java[BookingServiceImpl" modifiers="1" timestamp="1766398309741"/>
+</typeInfoHistroy>

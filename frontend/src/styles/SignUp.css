@@ -1,0 +1,89 @@
+.signup_page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    min-height: 100dvh;
+    /* background: #7674AA; */
+    background: linear-gradient(to right,#7674AA,#7171C1,#5661DC);
+    background: radial-gradient(#7674AA,#7171C1,#5661DC);
+}
+.signup_header{
+    font-size: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.signup_form{
+    
+    height: auto;
+    width: 400px;
+    background-color: #C7D1D6;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px black;
+
+}
+.signup_input_elements label{
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+}
+.signup_input_elements input{
+
+    margin-top: 2px;
+    margin-bottom: 10px;
+    height: 30px;
+    padding: 5px;
+    width: 95%;
+    border-radius: 5px;
+    border: none;
+
+}
+.signup_input_elements input:focus{
+    background-color:  #EBEBEB;
+}
+.signup_btns{
+    display: flex;
+    justify-content: center;
+}
+.signup_btns button{
+    margin: 10px 5px;
+    height: 30px;
+    width: 80px;
+    border-radius: 5px;
+    border: none;
+    background-color: #0A33FF;
+    color: white;
+    box-shadow: 0 4px 4px black;
+    letter-spacing: 1px;
+    padding: 4px;
+    transition: transform 0.4s ease,background 1s ease-in;
+
+}
+.signup_btns button:hover{
+      background: #1A22C1;
+    transform: scale(1.05);
+}
+.password_group{
+    padding-top: 10px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+.password_group input{
+    padding: 5px;
+}
+.show{
+    position: relative;
+     right: 40px;
+     
+}
+.show img{
+ height: 20px;
+ width: 20px;
+ transition: transform 0.4s ease;
+}
+.show img:hover{
+     transform: scale(1.1);
+}

@@ -1,0 +1,93 @@
+.booking {
+  padding: 20px;
+  width: 100%;
+  background-color: rgb(184, 186, 184);
+  min-height: 100vh;
+  height: 100%;
+}
+.item {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.item label {
+  width: 5%;
+}
+.item {
+  height: 50px;
+  color: black;
+  font-size: 20px;
+}
+.item input {
+  height: 40px;
+  width: 300px;
+  padding: 10px;
+}
+.price {
+}
+.price span {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+}
+.price {
+  font-size: 18px;
+}
+form input[type="submit"] {
+  height: 30px;
+  width: 100px;
+  background-color: #1bb658;
+  border: none;
+  color: white;
+}
+form input[type="submit"]:hover {
+  background-color: #177c0e;
+}
+.booking_card {
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+
+  gap: 10px;
+  width: 250px;
+  padding: 10px 20px 10px;
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 20px;
+  background-color: white;
+  transition: all 0.4s ease;
+}
+.booking_card:hover {
+  box-shadow: 0px 4px 10px black;
+  transform: scale(1.05);
+  transition: all 0.4s ease;
+}
+.booking_card_hotel_name {
+  font-size: 25px;
+  font-weight: 700;
+}
+.booking_card_RoomNo {
+  font-size: 18px;
+  font-weight: 400;
+}
+.booking_container {
+  background-color: var(--background_color);
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  padding: 100px;
+  padding-top: 50px;
+
+  flex-wrap: wrap;
+  align-items: center;
+}
+.booking_container button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.booking_card_amount span {
+  font-weight: bold;
+}
